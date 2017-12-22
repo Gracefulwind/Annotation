@@ -1,0 +1,9 @@
+//这里不需要加<<，加了反而会报错
+task demohello {
+    chant()
+    //最后执行的
+    doLast{
+        println "hello demo gradle"
+    }
+    println 'startSession'
+}
