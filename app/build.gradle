@@ -48,7 +48,6 @@ dependencies {
     //
     //    // 第三方 stream
     //    compile 'com.annimon:stream:1.1.3'
-    compile project(path: ':apt')
+//    compile project(path: ':apt')
     compile project(':simpleinject')
-//    compile project(path:'simpleinject')
 }

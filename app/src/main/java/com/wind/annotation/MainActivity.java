@@ -9,9 +9,11 @@ import android.widget.TextView;
 
 import com.wind.simpleinject.SimpleInject;
 
+//setContent方法用注入
 @InjectActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
+    //findView注入
     @InjectView(R.id.h_btn_click1)
     Button btnClick;
     @InjectView(R.id.h_btn_click2)
@@ -26,21 +28,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         SimpleInject.inject(this);
-//        MainActivity$$Inject.
-        btnClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("test,test,123!");
-            }
-        });
-//        new View().setOnClickListener();
     }
 
     int count=0;
-    @OnClick({R.id.h_btn_click1, R.id.h_et_input1})
-    public void onClick(View v){
+    //onClick事件注入
+    @OnClick({R.id.h_btn_click1, R.id.h_btn_click2})
+    public void testOnClickMethod(View v){
         switch (v.getId()){
             case R.id.h_btn_click1:
                 tvResult1.setText("第" + count++ + "次点击");

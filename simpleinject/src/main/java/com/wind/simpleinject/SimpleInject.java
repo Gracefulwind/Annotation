@@ -15,19 +15,16 @@ import java.util.List;
 
 public class SimpleInject {
 
-    final static HashMap<String, List<Method>> METHODS = new HashMap<>();
+    final static HashMap<String, Method> METHODS = new HashMap<>();
 
     public static<T extends Activity> void inject(T target){
         inject(target, target, target.getClass());
     }
 
     private static void inject(Object target, Object source, Class<? extends Activity> activityClass) {
-        List<Method> injectors = findInjector(target.getClass());
+        Method injector = findInjector(target.getClass());
         try {
-            //todo:这里下次优化，把所有的方法和遍历invoke再封在一个方法里
-            for(Method injector : injectors){
-                injector.invoke(null,target);
-            }
+            injector.invoke(null,target);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -40,32 +37,28 @@ public class SimpleInject {
      * 通过类名获取其findView和onClick方法
      *
      * */
-    private static List<Method> findInjector(Class target) {
-        List<Method> injectors;
+    private static Method findInjector(Class target) {
+        Method injector;
         //减少反射，提高效率
         String targetName = target.getName();
-        injectors = METHODS.get(targetName);
-        if(null != injectors){
-            return injectors;
+        injector = METHODS.get(targetName);
+        if(null != injector){
+            return injector;
         }
-        injectors = new ArrayList<>();
         try {
             Class<?> cls = Class.forName(targetName + "$$Inject");
-            Method injector;
             //findView
             injector = cls.getDeclaredMethod("inject", target);
-            injectors.add(injector);
             //添加到map中，加快下次读取
-            METHODS.put(targetName, injectors);
-            return injectors;
+            METHODS.put(targetName, injector);
+            return injector;
         //todo:如果出错应该全部不初始化还是初始化读到的部分？
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-
-        return new ArrayList<>();
+        return null;
     }
 
 //    public static void init(Activity activity){
