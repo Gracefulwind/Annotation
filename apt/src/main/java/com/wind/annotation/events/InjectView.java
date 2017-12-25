@@ -1,4 +1,4 @@
-package com.wind.annotation;
+package com.wind.annotation.events;
 
 
 import java.lang.annotation.ElementType;

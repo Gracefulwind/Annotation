@@ -44,6 +44,12 @@
             android:text="click here! fun2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/am_lv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
 
     </LinearLayout>
 

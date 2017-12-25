@@ -1,15 +1,17 @@
-package com.wind.annotation;
+package com.wind.annotation.progressors;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.wind.annotation.events.InjectActivity;
+import com.wind.annotation.events.InjectView;
+import com.wind.annotation.events.OnClick;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,8 +22,6 @@ import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -29,7 +29,6 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 
@@ -38,7 +37,7 @@ import javax.lang.model.util.Elements;
  * Email : Gracefulwind@163.com
  */
 //@SupportedAnnotationTypes的值为当前类支持的注解的完整类路径，支持通配符
-//@SupportedAnnotationTypes("com.wind.annotation.InjectView")
+//@SupportedAnnotationTypes("com.wind.annotation.annotations.InjectView")
 //@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ActivityProgressor extends AbstractProcessor {
 
@@ -71,6 +70,7 @@ public class ActivityProgressor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(InjectActivity.class);
         for (Element element : elements) {
             TypeElement activityElement = (TypeElement) element;
+//            elementUtils.
             //对这个类生成注解类
             TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(activityElement.getSimpleName() + "$$Inject")
                     .addModifiers(Modifier.PUBLIC);
@@ -83,11 +83,11 @@ public class ActivityProgressor extends AbstractProcessor {
             MethodSpec injectSpec = MethodSpec.methodBuilder("inject")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(TypeName.VOID)
+                    .addParameter(ClassName.get(activityElement), "source")
                     .addParameter(ClassName.get(activityElement), "activity")
-                    .addStatement("setContentView(activity)"
-                    ).addStatement("findView(activity)"
-                    ).addStatement("onClick(activity)"
-                    )
+                    .addStatement("setContentView(activity)")
+                    .addStatement("findView(activity)")
+                    .addStatement("onClick(activity)")
                     .build();
             typeSpecBuilder.addMethod(injectSpec);
             MethodSpec setContentViewSpec = MethodSpec.methodBuilder("setContentView")
@@ -95,8 +95,7 @@ public class ActivityProgressor extends AbstractProcessor {
                     .returns(TypeName.VOID)
                     .addParameter(ClassName.get(activityElement), "activity")
                     .addStatement("activity.setContentView($L)",
-                            value
-                            )
+                        value)
                     .build();
             typeSpecBuilder.addMethod(setContentViewSpec);
             //生成findView方法
@@ -179,24 +178,25 @@ public class ActivityProgressor extends AbstractProcessor {
             //资源文件的值不会小于0
             if (resId < 0) {
                 throw new IllegalArgumentException(
-                        String.format("value() in %s for field %s is not valid !", OnClick.class.getSimpleName(),
-                                executableElement.getSimpleName()));
+                    String.format("value() in %s for field %s is not valid !", OnClick.class.getSimpleName(),
+                        executableElement.getSimpleName()));
 //                continue;
             }
             //空格和\R\N只是为了格式好看，生成的代码理论上不给别人看，其实没必要加
-            onClickMethodBuilder.addStatement("activity.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
-                                    "@Override \r\n" +
-                                    "public void onClick($T view){ \r\n" +
-                                     "    activity.$N \r\n" +
-                                    "} \r\n" +
-                                "})",
-                        resId,
-                        //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
-                        androidView,
-                        androidView,
-                        //onClick方法：
-                        methodName + "(view);"
-                );
+            onClickMethodBuilder.addStatement(
+                "activity.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
+                    "@Override \r\n" +
+                            "public void onClick($T view){ \r\n" +
+                             "    activity.$N \r\n" +
+                            "} \r\n" +
+                        "})",
+                resId,
+                //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
+                androidView,
+                androidView,
+                //onClick方法：
+                methodName + "(view);"
+            );
 
         }
     }
@@ -208,9 +208,9 @@ public class ActivityProgressor extends AbstractProcessor {
             // 3. 获取resID
             int redID = injectViewAnnotation.value();
             findViewMethodBuilder.addStatement("activity.$L= ($T) activity.findViewById($L)",
-                        fieldElement,
-                        ClassName.get(fieldElement.asType()),
-                        redID);
+                fieldElement,
+                ClassName.get(fieldElement.asType()),
+                redID);
         }
     }
 

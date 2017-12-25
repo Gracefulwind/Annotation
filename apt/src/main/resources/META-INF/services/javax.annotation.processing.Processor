@@ -1,1 +1,2 @@
-com.wind.annotation.ActivityProgressor
+com.wind.annotation.progressors.ActivityProgressor
+com.wind.annotation.progressors.ViewProgressor
