@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/am_ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.wind.annotation.MainActivity"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/am_ll_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -44,10 +43,12 @@
             android:text="click here! fun2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <!--用固定高，防止多次getView影响效率-->
         <ListView
             android:id="@+id/am_lv_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="500dp">
 
         </ListView>
 

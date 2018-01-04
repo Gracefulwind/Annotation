@@ -1,5 +1,6 @@
 package com.wind.annotation.progressors;
 
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -51,9 +52,6 @@ public class ViewProgressor extends AbstractProcessor {
         HashSet<String> set = new HashSet<>();
         //只处理InjectActivity相关注解
         set.add(InjectHolder.class.getCanonicalName());
-        //由于InjectView和OnClick都是Activity的内部注解，所以这几个set也可以不返回
-//        set.add(InjectView.class.getCanonicalName());
-//        set.add(OnClick.class.getCanonicalName());
         return set;
     }
 
@@ -66,19 +64,25 @@ public class ViewProgressor extends AbstractProcessor {
             if (null == injectActivityAnnotation) {
                 continue;
             }
+            //在gradle打包时不能直接用R资源id的int值，所以需要在方法上加注解
+            ClassName suppressWarnings = ClassName.get("java.lang", "SuppressWarnings");
+            AnnotationSpec annoSpec = AnnotationSpec.builder(suppressWarnings)
+                    .addMember("value", "\"ResourceType\"")
+                    .build();
             TypeElement holderElement = (TypeElement) element;
 //            elementUtils.
             //com.xx.yy
             String packageName = elementUtils.getPackageOf(holderElement).getQualifiedName().toString();
             //com.xx.yy.外部类名.内部类名
             String fullName = holderElement.getQualifiedName().toString();
-            //
+            //处理，生成内部类名
             String realNameWithPoint = fullName.replace(packageName, "");
             String realName = realNameWithPoint.substring(1, realNameWithPoint.length()).replace(".", "$");
             //对这个类生成注解类
             TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(realName + "$$Inject")
-                .addModifiers(Modifier.PUBLIC);
-//            ClassName androidView = ClassName.get("android.widget","LinearLayout");
+                .addModifiers(Modifier.PUBLIC)
+                    .addAnnotation(annoSpec);
+            typeSpecBuilder.addJavadoc("created by SimpleInject,do not modify it!!!\r\nPlease email me(429344332@qq.com) if any error raise.");
             ClassName androidView = ClassName.get("android.view","View");
             //inject方法
             MethodSpec injectSpec = MethodSpec.methodBuilder("inject")

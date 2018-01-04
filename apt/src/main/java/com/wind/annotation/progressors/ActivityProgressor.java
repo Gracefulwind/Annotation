@@ -1,5 +1,6 @@
 package com.wind.annotation.progressors;
 
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -8,6 +9,7 @@ import com.squareup.javapoet.TypeSpec;
 import com.wind.annotation.events.InjectActivity;
 import com.wind.annotation.events.InjectView;
 import com.wind.annotation.events.OnClick;
+import com.wind.annotation.utils.ProgressorUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -69,56 +71,71 @@ public class ActivityProgressor extends AbstractProcessor {
         // 1. 获取所有注解了TargetClass的Element
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(InjectActivity.class);
         for (Element element : elements) {
-            TypeElement activityElement = (TypeElement) element;
-//            elementUtils.
-            //对这个类生成注解类
-            TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(activityElement.getSimpleName() + "$$Inject")
-                    .addModifiers(Modifier.PUBLIC);
-            //给类setContentView
             InjectActivity injectActivityAnnotation = element.getAnnotation(InjectActivity.class);
             if(null == injectActivityAnnotation) {
                 continue;
             }
+            TypeElement activityElement = (TypeElement) element;
+//            elementUtils.
+            //在gradle打包时不能直接用R资源id的int值，所以需要在方法上加注解
+            ClassName suppressWarnings = ClassName.get("java.lang", "SuppressWarnings");
+            AnnotationSpec annoSpec = AnnotationSpec.builder(suppressWarnings)
+                    .addMember("value", "\"ResourceType\"")
+                    .build();
+            //对这个类生成注解类
+            TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(activityElement.getSimpleName() + "$$Inject")
+                    .addModifiers(Modifier.PUBLIC)
+                    .addAnnotation(annoSpec);
+            typeSpecBuilder.addJavadoc("created by SimpleInject,do not modify it!!!\r\nPlease email me(429344332@qq.com) if any error raise.");
+            //给类setContentView
             int value = injectActivityAnnotation.value();
             MethodSpec injectSpec = MethodSpec.methodBuilder("inject")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(TypeName.VOID)
                     .addParameter(ClassName.get(activityElement), "source")
-                    .addParameter(ClassName.get(activityElement), "activity")
-                    .addStatement("setContentView(activity)")
-                    .addStatement("findView(activity)")
-                    .addStatement("onClick(activity)")
+                    .addParameter(ClassName.get(activityElement), "target")
+                    .addStatement("setContentView(source)")
+                    .addStatement("findView(source, target)")
+                    .addStatement("onClick(source, target)")
                     .build();
             typeSpecBuilder.addMethod(injectSpec);
             MethodSpec setContentViewSpec = MethodSpec.methodBuilder("setContentView")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(TypeName.VOID)
-                    .addParameter(ClassName.get(activityElement), "activity")
-                    .addStatement("activity.setContentView($L)",
+                    .addParameter(ClassName.get(activityElement), "source")
+                    .addStatement("source.setContentView($L)",
                         value)
                     .build();
             typeSpecBuilder.addMethod(setContentViewSpec);
+//            try {
+//                Class.forName("SuppressWarnings");
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+
             //生成findView方法
             MethodSpec.Builder findViewMethodBuilder = MethodSpec.methodBuilder("findView")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(TypeName.VOID)
-                    .addParameter(ClassName.get(activityElement), "activity");
+                    .addParameter(ClassName.get(activityElement), "source")
+                    .addParameter(ClassName.get(activityElement), "target");
             //生成onClick方法
             MethodSpec.Builder onClickMethodBuilder = MethodSpec.methodBuilder("onClick")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                     .returns(TypeName.VOID)
+                    .addParameter(ClassName.get(activityElement), "source")
                     //由于activity的调用是在接口实现类的内部，所以需要final
-                    .addParameter(ClassName.get(activityElement), "activity", Modifier.FINAL);
+                    .addParameter(ClassName.get(activityElement), "target", Modifier.FINAL);
             // 2. 获取单个类中，所有子Element
             List<? extends Element> members = elementUtils.getAllMembers(activityElement);
             for (Element fieldElement : members) {
                 //findView只处理绑定了 *InjectView注解* 的 *成员量*
                 if(fieldElement.getKind() == ElementKind.FIELD && null != fieldElement.getAnnotation(InjectView.class)){
-                    injectView(findViewMethodBuilder, fieldElement);
+                    ProgressorUtils.injectView(findViewMethodBuilder, fieldElement);
                 }
                 //findView只处理绑定了 *OnClick注解* 的 *成员方法*
                 if(fieldElement.getKind() == ElementKind.METHOD && null != fieldElement.getAnnotation(OnClick.class)){
-                    injectOnClick(onClickMethodBuilder, fieldElement);
+                    ProgressorUtils.injectOnClick(onClickMethodBuilder, fieldElement);
                 }
             }
             MethodSpec findViewSpec = findViewMethodBuilder.build();
@@ -156,62 +173,6 @@ public class ActivityProgressor extends AbstractProcessor {
             e.printStackTrace();
         }
         return fileWriter;
-    }
-
-    private void injectOnClick(MethodSpec.Builder onClickMethodBuilder, Element fieldElement) {
-        //只支持方法注解
-        ClassName androidView = ClassName.get("android.view","View");
-        if (fieldElement.getKind() != ElementKind.METHOD) {
-            return;
-        }
-        //转化成方法元素
-        ExecutableElement executableElement = (ExecutableElement) fieldElement;
-        //获取id
-        String methodName = executableElement.getSimpleName().toString();
-        //获取注解对象整体
-        OnClick onClickAnnotation = executableElement.getAnnotation(OnClick.class);
-        if(onClickAnnotation == null){
-            return;
-        }
-        int[] resIds = onClickAnnotation.value();
-        for(int resId : resIds){
-            //资源文件的值不会小于0
-            if (resId < 0) {
-                throw new IllegalArgumentException(
-                    String.format("value() in %s for field %s is not valid !", OnClick.class.getSimpleName(),
-                        executableElement.getSimpleName()));
-//                continue;
-            }
-            //空格和\R\N只是为了格式好看，生成的代码理论上不给别人看，其实没必要加
-            onClickMethodBuilder.addStatement(
-                "activity.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
-                    "@Override \r\n" +
-                            "public void onClick($T view){ \r\n" +
-                             "    activity.$N \r\n" +
-                            "} \r\n" +
-                        "})",
-                resId,
-                //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
-                androidView,
-                androidView,
-                //onClick方法：
-                methodName + "(view);"
-            );
-
-        }
-    }
-
-    private void injectView(MethodSpec.Builder findViewMethodBuilder, Element fieldElement) {
-        //对注释了InjectView的做处理
-        InjectView injectViewAnnotation = fieldElement.getAnnotation(InjectView.class);
-        if (null != injectViewAnnotation) {
-            // 3. 获取resID
-            int redID = injectViewAnnotation.value();
-            findViewMethodBuilder.addStatement("activity.$L= ($T) activity.findViewById($L)",
-                fieldElement,
-                ClassName.get(fieldElement.asType()),
-                redID);
-        }
     }
 
     /**

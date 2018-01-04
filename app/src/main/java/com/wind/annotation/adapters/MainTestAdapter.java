@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,15 +49,19 @@ public class MainTestAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        OutClass.ViewHolder holder = null;
         if(null == convertView){
             convertView = View.inflate(context, R.layout.item_main_test_adapter, null);
-            holder = new ViewHolder();
+            holder = new OutClass.ViewHolder(context);
             convertView.setTag(holder);
             SimpleInject.inject(convertView, holder);
         }else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (OutClass.ViewHolder) convertView.getTag();
         }
+//        //convertView == rootView
+//        int id = convertView.getId();
+//        System.out.println("new position is " + position);
+//        System.out.println("convertView id is " + id);
         ClickItemBean item = getItem(position);
         holder.tv1.setText(item.msg);
         String resource = "";
@@ -75,17 +80,31 @@ public class MainTestAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @InjectHolder
-    class ViewHolder{
-        @InjectView(R.id.imta_tv_text1)
-        TextView tv1;
-        @InjectView(R.id.imta_tv_text2)
-        TextView tv2;
+    //内部内部类。测试下编译期注解对内部类的处理有没问题
+    static class OutClass{
+        @InjectHolder
+        public static class ViewHolder{
 
-        @OnClick({R.id.imta_tv_text1, R.id.imta_tv_text2})
-        public void onClick(View v){
-            String str = ((TextView) v).getText().toString();
-            Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+            Context mContext;
+
+            public ViewHolder(Context mContext){
+                this.mContext = mContext;
+            }
+
+            @InjectView(R.id.imta_ll_contain)
+            LinearLayout rootView;
+            @InjectView(R.id.imta_tv_text1)
+            TextView tv1;
+            @InjectView(R.id.imta_tv_text2)
+            TextView tv2;
+
+            @OnClick({R.id.imta_tv_text1, R.id.imta_tv_text2})
+            public void onClick(View v){
+                String str = ((TextView) v).getText().toString();
+                Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
+//            System.out.println("rootView.id = " + rootView.getId());
+            }
         }
     }
+
 }

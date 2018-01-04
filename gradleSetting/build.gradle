@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        maven {
+            url 'http://192.168.61.171:8081/nexus/content/groups/public/'
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.0'
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url 'http://192.168.61.171:8081/nexus/content/groups/public/'
+        }
+    }
+}
+
+ext {
+    robobindingVersion = '0.8.9'
+}
+
+apply from: 'plugDebug.gradle'
+
+def getGitVersionCode() {
+    return ['sh', '-c', 'git rev-list HEAD | wc -l'].execute().text.trim().toInteger();
+}
+
+def getGitCommitHash() {
+    return ['sh', '-c', 'git log --pretty=format:%h -n 1'].execute().text.trim();
+}
+
+def getGitVersion() {
+    return ['sh', '-c', 'git rev-parse --short HEAD'].execute().text.trim();
+}
+
+def getLogHistory() {
+    def cmd = 'git log --pretty=format:\"%h %an | %s%d" ';
+    def lastVersion = new File("lastVersion.txt")
+    println lastVersion.absolutePath
+    if (lastVersion.exists()) {
+        cmd = cmd + lastVersion.text.trim() + "...HEAD";
+    }
+    println cmd
+    def result = ['sh', '-c', "$cmd"].execute().text
+    return result;
+}

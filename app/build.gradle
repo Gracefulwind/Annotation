@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-//there r same?
-//apply plugin: 'android-apt'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 26
@@ -22,12 +19,53 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+//        debug {
+//            // 显示Log
+//            buildConfigField "boolean", "LOG_DEBUG", "true"
+//            //混淆
+//            minifyEnabled false
+//            //Zipalign优化
+//            zipAlignEnabled true
+//            // 移除无用的resource文件
+//            shrinkResources true
+//            //加载默认混淆配置文件
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            //签名
+//            signingConfig signingConfigs.debug
+//        }
+//        release {
+//            // 不显示Log
+//            buildConfigField "boolean", "LOG_DEBUG", "false"
+//            //混淆
+//            minifyEnabled true
+//            //Zipalign优化
+//            zipAlignEnabled true
+//            // 移除无用的resource文件
+//            shrinkResources true
+//            //加载默认混淆配置文件
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            //签名
+//            signingConfig signingConfigs.relealse
+//        }
     }
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
+
 }
+//signingConfigs {
+//    debug {
+//        storeFile file("aaa.keystore")
+//        storePassword "88832723"
+//        keyAlias "aaa.keystore"
+//        keyPassword "88832723"
+//    }
+//    relealse {
+//        storeFile file("aaa.keystore")
+//        storePassword "111111111"
+//        keyAlias "aaa.keystore"
+//        keyPassword "111111111"
+//    }
+//}
+
 
 
 dependencies {
@@ -38,16 +76,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    //    compile project(":apt")
-    //    //==编译器注解用======
-    //    sourceCompatibility = JavaVersion.VERSION_1_8
-    //    targetCompatibility = JavaVersion.VERSION_1_8
-    //
-    //    // java 代码生成器: java-1.7, 由 square 开发
-    //    compile 'com.squareup:javapoet:1.7.0'
-    //
-    //    // 第三方 stream
-    //    compile 'com.annimon:stream:1.1.3'
 //    compile project(path: ':apt')
     compile project(':simpleinject')
 }

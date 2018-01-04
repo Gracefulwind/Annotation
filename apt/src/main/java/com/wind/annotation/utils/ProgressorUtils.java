@@ -54,18 +54,18 @@ public class ProgressorUtils {
             }
             //空格和\R\N只是为了格式好看，生成的代码理论上不给别人看，其实没必要加
             onClickMethodBuilder.addStatement(
-                    "source.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
-                        "@Override \r\n" +
-                        "public void onClick($T view){ \r\n" +
-                        "    target.$N \r\n" +
-                        "} \r\n" +
-                    "})",
-                    resId,
-                    //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
-                    androidView,
-                    androidView,
-                    //onClick方法：
-                    methodName + "(view);"
+                "source.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
+                    "@Override \r\n" +
+                    "public void onClick($T view){ \r\n" +
+                    "    target.$N \r\n" +
+                    "} \r\n" +
+                "})",
+                resId,
+                //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
+                androidView,
+                androidView,
+                //onClick方法：
+                methodName + "(view);"
             );
 
         }

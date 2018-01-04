@@ -1,2 +1,3 @@
 com.wind.annotation.progressors.ActivityProgressor
 com.wind.annotation.progressors.ViewProgressor
+com.wind.annotation.progressors.TestProgressor
