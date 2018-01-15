@@ -24,9 +24,10 @@ import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
@@ -40,7 +41,7 @@ import javax.lang.model.util.Elements;
  */
 //@SupportedAnnotationTypes的值为当前类支持的注解的完整类路径，支持通配符
 //@SupportedAnnotationTypes("com.wind.annotation.annotations.InjectView")
-//@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ActivityProgressor extends AbstractProcessor {
 
     /**

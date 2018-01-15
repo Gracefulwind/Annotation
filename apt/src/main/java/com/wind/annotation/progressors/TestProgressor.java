@@ -14,6 +14,8 @@ import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
@@ -22,7 +24,7 @@ import javax.lang.model.util.Elements;
  * Created by Gracefulwind Wang on 2017/12/26.
  * Email : Gracefulwind@163.com
  */
-
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class TestProgressor extends AbstractProcessor {
     /**
      * 元素操作的辅助类

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
@@ -24,40 +25,28 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-//        exclude group: 'com.android.support', module: 'support-annotations'
-//    })
-//    compile 'com.android.support:appcompat-v7:26.+'
-//    testCompile 'junit:junit:4.12'
-
     compile project(path: ':apt')
 }
 
-//task makeJar(type: Copy) {
-//    delete 'build/libs/mysdk.jar'
-//    from('build/intermediates/bundles/release/')
-//    into('build/libs/')
-//    include('classes.jar')
-//    rename ('classes.jar', 'mysdk.jar')
-//}
-//
-//makeJar.dependsOn(build)
-
-task buildJar(type:Jar){
-
-    baseName'simpleinject' //jar包命名
-
-    from('build/intermediates/classes/debug/com/wind/simpleinject')
-
-    into('com/wind/simpleinject/')
-
-    exclude('BuildConfig.class','R.class') //去除无用的资源类及build资源类文件
-
-    exclude{it.name.startsWith('R$');}
-
+publish {
+    userOrg = 'hyman'//bintray.com用户名
+    groupId = 'com.hyman'//jcenter上的路径
+    artifactId = 'simpleinject'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
+    website = 'https://github.com/hyman/basetools'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }
-//task cleanJar(type:Delete){
+
+//task buildJar(type:Jar){
 //
-//    delete'build/libs/simpleinject.jar'
+//    baseName'simpleinject' //jar包命名
+//
+//    from('build/intermediates/classes/debug/com/wind/simpleinject')
+//
+//    into('com/wind/simpleinject/')
+//
+//    exclude('BuildConfig.class','R.class') //去除无用的资源类及build资源类文件
+//
+//    exclude{it.name.startsWith('R$');}
 //
 //}
