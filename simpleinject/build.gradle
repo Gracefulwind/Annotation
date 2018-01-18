@@ -29,13 +29,26 @@ dependencies {
 }
 
 publish {
-    userOrg = 'hyman'//bintray.com用户名
-    groupId = 'com.hyman'//jcenter上的路径
-    artifactId = 'simpleinject'//项目名称
-    publishVersion = '1.0.0'//版本号
-    desc = 'Oh hi, this is a nice description for a project, right?'//描述，不重要
-    website = 'https://github.com/hyman/basetools'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+    artifactId = 'wdinject-injector'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
 }
+
+//publish {
+//    artifactId = 'wdinject-injector'
+//    userOrg = 'wdAndroid'
+//    groupId = 'com.gracefulwind'
+//    uploadName = 'WDSimpleInject'
+//    publishVersion = '1.0.1'
+//    desc = 'a easy API to inject holder and activity for Android '
+//    website = 'https://github.com/Gracefulwind/Annotation'
+//    licences = ['Apache-2.0']
+//}
 
 //task buildJar(type:Jar){
 //

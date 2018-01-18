@@ -28,11 +28,44 @@ dependencies {
 //    exclude{it.name.startsWith('R$');}
 //
 //}
-publish{
-    userOrg = 'WD'
-    groupId = 'com.wind.annotation'
-    artifactId = 'mylibrary'
-    publishVersion = '0.0.1'
-    desc = 'this is a Test'
-    website = '***'
+
+//publish{
+//    userOrg = 'WD'
+//    groupId = 'com.wind.annotation'
+//    artifactId = 'mylibrary'
+//    publishVersion = '0.0.1'
+//    desc = 'this is a Test'
+//    website = '***'
+//}
+
+publish {
+    artifactId = 'wdinject-apt'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
 }
+
+//publish {
+//    artifactId = 'wdinject-apt'
+//    userOrg = 'wdAndroid'
+//    groupId = 'com.gracefulwind'
+//    uploadName = 'WDSimpleInject'
+//    publishVersion = '1.0.1'
+//    desc = 'a easy API to inject holder and activity for Android '
+//    website = 'https://github.com/Gracefulwind/Annotation'
+//    licences = ['Apache-2.0']
+//}
+
+//ext {
+//    userOrg = 'wdAndroid'
+//    groupId = 'com.gracefulwind'
+//    uploadName = 'WDSimpleInject'
+//    publishVersion = '1.0.1'
+//    desc = 'a easy API to inject holder and activity for Android '
+//    website = 'https://github.com/Gracefulwind/Annotation'
+//    licences = ['Apache-2.0']
+//}
