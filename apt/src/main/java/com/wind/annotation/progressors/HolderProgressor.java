@@ -6,7 +6,6 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.wind.annotation.events.InjectActivity;
 import com.wind.annotation.events.InjectHolder;
 import com.wind.annotation.events.InjectView;
 import com.wind.annotation.events.OnClick;
@@ -23,10 +22,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
@@ -66,20 +62,22 @@ public class ViewProgressor extends AbstractProcessor {
             if (null == injectActivityAnnotation) {
                 continue;
             }
+            //生成类名
+            TypeElement holderElement = (TypeElement) element;
+            //这里获取的是包名：com.xx.yy
+            String packageName = elementUtils.getPackageOf(holderElement).getQualifiedName().toString();
+            //这里获取的是完整名：com.xx.yy.外部类名.内部类名
+            String fullName = holderElement.getQualifiedName().toString();
+            //处理，生成内部类名
+            //1.将包名去掉
+            String realNameWithPoint = fullName.replace(packageName, "");
+            //2.将内部类的"."替换成"#"
+            String realName = realNameWithPoint.substring(1, realNameWithPoint.length()).replace(".", "$");
             //在gradle打包时不能直接用R资源id的int值，所以需要在方法上加注解
             ClassName suppressWarnings = ClassName.get("java.lang", "SuppressWarnings");
             AnnotationSpec annoSpec = AnnotationSpec.builder(suppressWarnings)
                     .addMember("value", "\"ResourceType\"")
                     .build();
-            TypeElement holderElement = (TypeElement) element;
-//            elementUtils.
-            //com.xx.yy
-            String packageName = elementUtils.getPackageOf(holderElement).getQualifiedName().toString();
-            //com.xx.yy.外部类名.内部类名
-            String fullName = holderElement.getQualifiedName().toString();
-            //处理，生成内部类名
-            String realNameWithPoint = fullName.replace(packageName, "");
-            String realName = realNameWithPoint.substring(1, realNameWithPoint.length()).replace(".", "$");
             //对这个类生成注解类
             TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(realName + "$$Inject")
                 .addModifiers(Modifier.PUBLIC)
@@ -131,9 +129,6 @@ public class ViewProgressor extends AbstractProcessor {
             TypeSpec typeSpec = typeSpecBuilder.build();
             //保存文件
             try {
-                // 获取包名
-//                PackageElement packageElement = elementUtils.getPackageOf(holderElement);
-//                String packageName = packageElement.getQualifiedName().toString();
                 // 创建文件
                 JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build();
                 javaFile.writeTo(processingEnv.getFiler());
@@ -143,61 +138,5 @@ public class ViewProgressor extends AbstractProcessor {
         }
         return true;
     }
-
-//    private void injectView(MethodSpec.Builder findViewMethodBuilder, Element fieldElement) {
-//        //对注释了InjectView的做处理
-//        InjectView injectViewAnnotation = fieldElement.getAnnotation(InjectView.class);
-//        if (null != injectViewAnnotation) {
-//            // 3. 获取resID
-//            int redID = injectViewAnnotation.value();
-//            findViewMethodBuilder.addStatement("activity.$L= ($T) activity.findViewById($L)",
-//                fieldElement,
-//                ClassName.get(fieldElement.asType()),
-//                redID);
-//        }
-//    }
-
-//    private void injectOnClick(MethodSpec.Builder onClickMethodBuilder, Element fieldElement) {
-//        //只支持方法注解
-//        ClassName androidView = ClassName.get("android.view","View");
-//        if (fieldElement.getKind() != ElementKind.METHOD) {
-//            return;
-//        }
-//        //转化成方法元素
-//        ExecutableElement executableElement = (ExecutableElement) fieldElement;
-//        //获取id
-//        String methodName = executableElement.getSimpleName().toString();
-//        //获取注解对象整体
-//        OnClick onClickAnnotation = executableElement.getAnnotation(OnClick.class);
-//        if(onClickAnnotation == null){
-//            return;
-//        }
-//        int[] resIds = onClickAnnotation.value();
-//        for(int resId : resIds){
-//            //资源文件的值不会小于0
-//            if (resId < 0) {
-//                throw new IllegalArgumentException(
-//                    String.format("value() in %s for field %s is not valid !", OnClick.class.getSimpleName(),
-//                        executableElement.getSimpleName()));
-////                continue;
-//            }
-//            //空格和\R\N只是为了格式好看，生成的代码理论上不给别人看，其实没必要加
-//            onClickMethodBuilder.addStatement(
-//                "activity.findViewById($L).setOnClickListener(new $T.OnClickListener(){ \r\n" +
-//                    "@Override \r\n" +
-//                    "public void onClick($T view){ \r\n" +
-//                        "    activity.$N \r\n" +
-//                        "} \r\n" +
-//                    "})",
-//                resId,
-//                //是否可以全用view的具体子类？ --不可，因为id未必有field给他类型，所以类型是未知的。这里用基类View是最好的
-//                androidView,
-//                androidView,
-//                //onClick方法：
-//                methodName + "(view);"
-//            );
-//
-//        }
-//    }
 
 }
