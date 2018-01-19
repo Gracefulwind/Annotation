@@ -7,7 +7,6 @@ import android.view.Surface;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.squareup.javapoet.ClassName;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

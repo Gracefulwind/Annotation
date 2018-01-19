@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
@@ -33,7 +33,8 @@ tasks.withType(Javadoc) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(path: ':apt')
+    //在injector中引用，这样子外部就只要引用一个包了。。。不行，还是得引2个
+    compile 'com.gracefulwind:wdinject-apt:1.0.2'
 }
 
 publish {

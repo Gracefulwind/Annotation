@@ -1,1 +1,1 @@
-include ':app', ':simpleinject', ':apt'
+include ':app', ':simpleinject', ':compiler'
