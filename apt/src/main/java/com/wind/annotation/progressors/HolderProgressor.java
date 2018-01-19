@@ -31,7 +31,7 @@ import javax.lang.model.util.Elements;
  * Email : Gracefulwind@163.com
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
-public class ViewProgressor extends AbstractProcessor {
+public class HolderProgressor extends AbstractProcessor {
 
     /**
      * 元素操作的辅助类
@@ -58,8 +58,8 @@ public class ViewProgressor extends AbstractProcessor {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(InjectHolder.class);
         for (Element element : elements) {
             //没有Holder注解则继续循环
-            InjectHolder injectActivityAnnotation = element.getAnnotation(InjectHolder.class);
-            if (null == injectActivityAnnotation) {
+            InjectHolder injectHolderAnnotation = element.getAnnotation(InjectHolder.class);
+            if (null == injectHolderAnnotation) {
                 continue;
             }
             //生成类名

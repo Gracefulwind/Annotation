@@ -1,3 +1,4 @@
 com.wind.annotation.progressors.ActivityProgressor
-com.wind.annotation.progressors.ViewProgressor
-com.wind.annotation.progressors.TestProgressor
+com.wind.annotation.progressors.HolderProgressor
+com.wind.annotation.progressors.FragmentProgressor
+#com.wind.annotation.progressors.TestProgressor

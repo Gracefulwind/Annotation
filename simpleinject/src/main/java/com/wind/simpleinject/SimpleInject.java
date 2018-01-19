@@ -22,6 +22,7 @@ public class SimpleInject {
 
     final static HashMap<String, Method> METHODS = new HashMap<>();
 
+    //todo：在后续版本中使用FInder
 //    public enum Finder {
 //        VIEW {
 //            @Override public View findOptionalView(Object source, int id) {
@@ -45,6 +46,10 @@ public class SimpleInject {
     }
 
     public static<S extends View, T extends Object> void inject(S source, T target){
+        inject(source, target, target.getClass(), true);
+    }
+
+    public static<S extends View, T extends Fragment> void inject(S source, T target){
         inject(source, target, target.getClass(), true);
     }
 
@@ -107,24 +112,4 @@ public class SimpleInject {
         }
         return null;
     }
-
-//    public static void init(Activity activity){
-//        String localClassName = activity.getLocalClassName();
-////        System.out.println(localClassName);
-//        Class<?> activityClass = null;
-////        InjectMainActivity.bind(activity);
-//        try {
-//            activityClass = Class.forName("Inject" + localClassName);
-//            Method init = activityClass.getDeclaredMethod("init", );
-//            init.invoke(null,activity);
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
