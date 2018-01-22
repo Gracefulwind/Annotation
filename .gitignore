@@ -7,3 +7,8 @@
 /build
 /captures
 .externalNativeBuild
+
+*.apk
+*.ap_
+local.properties
+*.log
