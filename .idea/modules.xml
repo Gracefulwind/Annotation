@@ -3,9 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Annotation.iml" filepath="$PROJECT_DIR$/Annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/annolib/annolib.iml" filepath="$PROJECT_DIR$/annolib/annolib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler/compiler.iml" filepath="$PROJECT_DIR$/compiler/compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simpleinject/simpleinject.iml" filepath="$PROJECT_DIR$/simpleinject/simpleinject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/injector/injector.iml" filepath="$PROJECT_DIR$/injector/injector.iml" />
     </modules>
   </component>
 </project>

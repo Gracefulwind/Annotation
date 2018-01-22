@@ -1,11 +1,8 @@
 package com.wind.simpleinject;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.view.Surface;
 import android.view.View;
-import android.widget.LinearLayout;
 
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +18,7 @@ public class SimpleInject {
 
     final static HashMap<String, Method> METHODS = new HashMap<>();
 
-    //todo：在后续版本中使用FInder
+    //todo：在后续版本中使用Finder
 //    public enum Finder {
 //        VIEW {
 //            @Override public View findOptionalView(Object source, int id) {

@@ -33,15 +33,14 @@ tasks.withType(Javadoc) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    //在injector中引用，这样子外部就只要引用一个包了。。。不行，还是得引2个
-    compile 'com.gracefulwind:wdinject-apt:1.0.2'
+    compile project(path: ':annolib')
 }
 
 publish {
     artifactId = 'wdinject-injector'
+    uploadName = 'WDInjector'
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
-    uploadName = 'WDSimpleInjector'
     publishVersion = rootProject.publishVersion
     desc = rootProject.description
     website = rootProject.website

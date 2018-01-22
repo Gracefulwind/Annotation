@@ -1,1 +1,1 @@
-include ':app', ':simpleinject', ':compiler'
+include ':app', ':injector', ':compiler', ':annolib'

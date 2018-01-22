@@ -16,6 +16,7 @@ dependencies {
     compile 'com.squareup:javapoet:1.8.0'
     //    // 第三方 stream
     //    compile 'com.annimon:stream:1.1.3'
+    compile project(path: ':annolib')
 }
 //task buildJar(type:Jar){
 //
@@ -41,10 +42,11 @@ dependencies {
 //}
 
 publish {
-    artifactId = 'wdinject-apt'
+    artifactId = 'wdinject-compiler'
+    uploadName = 'WDCompiler'
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
-    uploadName = rootProject.uploadName
+//    uploadName = rootProject.uploadName
     publishVersion = rootProject.publishVersion
     desc = rootProject.description
     website = rootProject.website

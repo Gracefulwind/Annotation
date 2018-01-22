@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'me.tatarka:gradle-retrolambda:3.2.4'
-//        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.novoda:bintray-release:0.4.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,9 +22,9 @@ allprojects {
 ext {
     userOrg = 'gracefulwind'
     groupId = 'com.gracefulwind'
-    uploadName = 'WDSimpleInject'
-    publishVersion = '1.0.3'
-    desc = 'a easy API to inject holder and activity for Android '
+//    uploadName = 'WDSimpleInject'
+    publishVersion = '1.0.0'
+    desc = 'a easy API to injecting holders and activities for Android '
     website = 'https://github.com/Gracefulwind/Annotation'
     licences = ['Apache-2.0']
 }
