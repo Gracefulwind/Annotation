@@ -3,11 +3,11 @@
 
 具体的使用例子在sample中。
 
-在module中的使用：
-dependencies {
-    ...
-    compile 'com.gracefulwind:wdinject:1.1.4'
-    annotationProcessor 'com.gracefulwind:wdinject-compiler:1.1.4'
-}
+在module中的使用：  
+dependencies {  
+        ...  
+        compile 'com.gracefulwind:wdinject:1.1.4'  
+        annotationProcessor 'com.gracefulwind:wdinject-compiler:1.1.4'  
+}  
 
 关于编译期注解的原理，会在之后更新学习笔记说明。
