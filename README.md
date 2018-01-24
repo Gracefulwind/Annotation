@@ -10,4 +10,8 @@ dependencies {
         annotationProcessor 'com.gracefulwind:wdinject-compiler:1.1.4'  
 }  
 
-关于编译期注解的原理，会在之后更新学习笔记说明。
+关于编译期注解的原理，会在之后更新学习笔记说明。  
+
+# License  
+Apache v2.0 licensed
+
