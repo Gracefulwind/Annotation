@@ -1,1 +1,1 @@
-include ':app', ':injector', ':compiler', ':annolib'
+include ':sample', ':injector', ':compiler', ':annolib'

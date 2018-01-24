@@ -16,60 +16,17 @@ dependencies {
     compile 'com.squareup:javapoet:1.8.0'
     //    // 第三方 stream
     //    compile 'com.annimon:stream:1.1.3'
-    compile project(path: ':annolib')
-}
-//task buildJar(type:Jar){
-//
-//    baseName'apt' //jar包命名
-//
-//    from('build/intermediates/classes/main/com/wind/annotation')
-//
-//    into('com/wind/annotation')
-//
-//    exclude('BuildConfig.class','R.class') //去除无用的资源类及build资源类文件
-//
-//    exclude{it.name.startsWith('R$');}
-//
-//}
 
-//publish{
-//    userOrg = 'WD'
-//    groupId = 'com.wind.annotation'
-//    artifactId = 'mylibrary'
-//    publishVersion = '0.0.1'
-//    desc = 'this is a Test'
-//    website = '***'
-//}
+    compile 'com.gracefulwind:wdinject-annotations:1.1.4'
+}
 
 publish {
     artifactId = 'wdinject-compiler'
     uploadName = 'WDCompiler'
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
-//    uploadName = rootProject.uploadName
     publishVersion = rootProject.publishVersion
     desc = rootProject.description
     website = rootProject.website
     licences = rootProject.licences
 }
-
-//publish {
-//    artifactId = 'wdinject-apt'
-//    userOrg = 'wdAndroid'
-//    groupId = 'com.gracefulwind'
-//    uploadName = 'WDSimpleInject'
-//    publishVersion = '1.0.1'
-//    desc = 'a easy API to inject holder and activity for Android '
-//    website = 'https://github.com/Gracefulwind/Annotation'
-//    licences = ['Apache-2.0']
-//}
-
-//ext {
-//    userOrg = 'wdAndroid'
-//    groupId = 'com.gracefulwind'
-//    uploadName = 'WDSimpleInject'
-//    publishVersion = '1.0.1'
-//    desc = 'a easy API to inject holder and activity for Android '
-//    website = 'https://github.com/Gracefulwind/Annotation'
-//    licences = ['Apache-2.0']
-//}

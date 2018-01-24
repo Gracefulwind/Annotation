@@ -23,7 +23,7 @@ ext {
     userOrg = 'gracefulwind'
     groupId = 'com.gracefulwind'
 //    uploadName = 'WDSimpleInject'
-    publishVersion = '1.0.0'
+    publishVersion = '1.1.4'
     desc = 'a easy API to injecting holders and activities for Android '
     website = 'https://github.com/Gracefulwind/Annotation'
     licences = ['Apache-2.0']

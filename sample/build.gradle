@@ -86,8 +86,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
-    compile project(':injector')
-    annotationProcessor project(':compiler')
-//    compile project(':compiler')
+//    compile project(':injector')
+//    annotationProcessor project(':compiler')
+
+    //这里我用的是jcenter上的包
+    compile 'com.gracefulwind:wdinject:1.1.4'
+    annotationProcessor 'com.gracefulwind:wdinject-compiler:1.1.4'
 
 }

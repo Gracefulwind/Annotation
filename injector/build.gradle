@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
@@ -33,11 +32,11 @@ tasks.withType(Javadoc) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(path: ':annolib')
+    compile 'com.gracefulwind:wdinject-annotations:1.1.4'
 }
 
 publish {
-    artifactId = 'wdinject-injector'
+    artifactId = 'wdinject'
     uploadName = 'WDInjector'
     userOrg = rootProject.userOrg
     groupId = rootProject.groupId
@@ -46,28 +45,3 @@ publish {
     website = rootProject.website
     licences = rootProject.licences
 }
-
-//publish {
-//    artifactId = 'wdinject-injector'
-//    userOrg = 'wdAndroid'
-//    groupId = 'com.gracefulwind'
-//    uploadName = 'WDSimpleInject'
-//    publishVersion = '1.0.1'
-//    desc = 'a easy API to inject holder and activity for Android '
-//    website = 'https://github.com/Gracefulwind/Annotation'
-//    licences = ['Apache-2.0']
-//}
-
-//task buildJar(type:Jar){
-//
-//    baseName'simpleinject' //jar包命名
-//
-//    from('build/intermediates/classes/debug/com/wind/simpleinject')
-//
-//    into('com/wind/simpleinject/')
-//
-//    exclude('BuildConfig.class','R.class') //去除无用的资源类及build资源类文件
-//
-//    exclude{it.name.startsWith('R$');}
-//
-//}
